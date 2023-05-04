@@ -30,9 +30,21 @@ export const App = () => {
     getElapsedTime();
   }, [date]);
   const [elapsedTime, setElapsedTime] = useState<Time | undefined>();
+
+  const [startText, setStartText] = useState<string>();
+  const [endText, setEndText] = useState<string>();
+
   const [workStartTime, setWorkStartTime] = useState<Time | undefined>();
   const [workEndTime, setWorkEndTime] = useState<Time | undefined>();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setStartText(formatTime(workStartTime));
+  }, [workStartTime]);
+
+  useEffect(() => {
+    setEndText(formatTime(workEndTime));
+  }, [workEndTime]);
 
   const workStart = () => {
     setWorkStartTime({ h: date.getHours(), m: date.getMinutes(), s: date.getSeconds() });
@@ -47,6 +59,7 @@ export const App = () => {
     getElapsedTime();
   };
   const workEndClear = () => {
+    console.log('test');
     setWorkEndTime(undefined);
     getElapsedTime();
   };
@@ -92,16 +105,81 @@ export const App = () => {
     return `${formattedHour}:${formattedMinutes}`;
   };
 
+  const handleChangeStart = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputVal = event.target.value;
+    let formattedVal = inputVal.replace(/[^0-9:]/g, ''); // 数値とコロン以外を取り除く
+    formattedVal = formattedVal.replace(/:+/g, ':'); // 連続するコロンを1つにまとめる
+    if (formattedVal.length === 4 && !formattedVal.includes(':')) {
+      // 4桁の場合はHH:MM形式に変換する
+      const hour = formattedVal.substr(0, 2);
+      const minute = formattedVal.substr(2, 2);
+      formattedVal = `${hour}:${minute}`;
+    } else if (formattedVal.length > 4 && !formattedVal.includes(':')) {
+      // 5桁以上の場合は、末尾から4桁だけをHH:MM形式に変換する
+      // formattedVal = formattedVal.substr(-4);
+      const hour = formattedVal.substr(0, 2);
+      const minute = formattedVal.substr(2, 2);
+      formattedVal = `${hour}:${minute}`;
+    }
+
+    formattedVal = formattedVal.replace(/:+/g, ':'); // 2つ以上連続したコロンを1つに置換する
+    setStartText(formattedVal);
+  };
+  const startInput = document.getElementById('startTime') as HTMLInputElement;
+
+  const handleChangeEnd = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputVal = event.target.value;
+    let formattedVal = inputVal.replace(/[^0-9:]/g, ''); // 数値とコロン以外を取り除く
+    formattedVal = formattedVal.replace(/:+/g, ':'); // 連続するコロンを1つにまとめる
+    if (formattedVal.length === 4) {
+      // 4桁の場合はHH:MM形式に変換する
+      const hour = formattedVal.substr(0, 2);
+      const minute = formattedVal.substr(2, 2);
+      formattedVal = `${hour}:${minute}`;
+      startInput.classList.add('error');
+    } else if (formattedVal.length > 4) {
+      // 5桁以上の場合は、末尾から4桁だけをHH:MM形式に変換する
+      formattedVal = formattedVal.substr(-4);
+      const hour = formattedVal.substr(0, 2);
+      const minute = formattedVal.substr(2, 2);
+      formattedVal = `${hour}:${minute}`;
+    }
+    formattedVal = formattedVal.replace(/:+/g, ':'); // 2つ以上連続したコロンを1つに置換する
+    setEndText(formattedVal);
+  };
+
   return (
     <div className="container">
       {h.toString().padStart(2, '0')}:{m.toString().padStart(2, '0')}:
       {s.toString().padStart(2, '0')}
       <h1>Hello!!</h1>
       <div>{elapsedTime ? `経過時間：${formatTime(elapsedTime)}` : '経過時間：--:--'}</div>
-      <div>{workStartTime ? `開始時間：${formatTime(workStartTime)}` : '開始時間：--:--'}</div>
+      {/* <div>{workStartTime ? `開始時間：${formatTime(workStartTime)}` : '開始時間：--:--'}</div> */}
+      <label htmlFor="name">開始時間:</label>
+      <input
+        type="text"
+        id="startTime"
+        name="name"
+        value={startText}
+        required
+        minLength={parseInt('4')}
+        maxLength={parseInt('5')}
+        onChange={handleChangeStart}
+      ></input>
       <button onClick={workStart}>出社</button>
       <button onClick={workStartClear}>クリア</button>
-      <div>{workEndTime ? `${formatTime(workEndTime)}` : '終了時間：--:--'}</div>
+      {/* <div>{workEndTime ? `${formatTime(workEndTime)}` : '終了時間：--:--'}</div> */}
+      <label htmlFor="name">終了時間:</label>
+      <input
+        type="text"
+        id="endTime"
+        name="name"
+        value={endText}
+        required
+        minLength={parseInt('4')}
+        maxLength={parseInt('5')}
+        onChange={handleChangeEnd}
+      ></input>
       <button onClick={workEnd}>退社</button>
       <button onClick={workEndClear}>クリア</button>
     </div>
