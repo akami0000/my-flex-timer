@@ -124,8 +124,14 @@ export const App = () => {
 
     formattedVal = formattedVal.replace(/:+/g, ':'); // 2つ以上連続したコロンを1つに置換する
     setStartText(formattedVal);
+
+    if (formattedVal.length === 5 && formattedVal.includes(':')) {
+      const newStr = formattedVal.replace(/:/g, '');
+      const hour = newStr.substr(0, 2);
+      const minute = newStr.substr(2, 2);
+      setWorkStartTime({ h: Number(hour), m: Number(minute), s: 0 });
+    }
   };
-  const startInput = document.getElementById('startTime') as HTMLInputElement;
 
   const handleChangeEnd = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputVal = event.target.value;
@@ -136,7 +142,6 @@ export const App = () => {
       const hour = formattedVal.substr(0, 2);
       const minute = formattedVal.substr(2, 2);
       formattedVal = `${hour}:${minute}`;
-      startInput.classList.add('error');
     } else if (formattedVal.length > 4) {
       // 5桁以上の場合は、末尾から4桁だけをHH:MM形式に変換する
       formattedVal = formattedVal.substr(-4);
@@ -146,6 +151,13 @@ export const App = () => {
     }
     formattedVal = formattedVal.replace(/:+/g, ':'); // 2つ以上連続したコロンを1つに置換する
     setEndText(formattedVal);
+
+    if (formattedVal.length === 5 && formattedVal.includes(':')) {
+      const newStr = formattedVal.replace(/:/g, '');
+      const hour = newStr.substr(0, 2);
+      const minute = newStr.substr(2, 2);
+      setWorkEndTime({ h: Number(hour), m: Number(minute), s: 0 });
+    }
   };
 
   return (
