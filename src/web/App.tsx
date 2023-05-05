@@ -9,6 +9,7 @@ interface Time {
   m: number;
   s: number;
 }
+
 const ButtonExampleButton = () => <Button>Click Here</Button>;
 
 export default ButtonExampleButton;
@@ -25,14 +26,26 @@ export const App = () => {
 
   const [elapsedTime, setElapsedTime] = useState<Time | undefined>();
 
-  const [startText, setStartText] = useState<string>();
-  const [endText, setEndText] = useState<string>();
-
   const [workStartTime, setWorkStartTime] = useState<Time | undefined>();
   const [workEndTime, setWorkEndTime] = useState<Time | undefined>();
+  const [breakTime1, setBreakTime1] = useState<Time | undefined>();
+  const [breakTime2, setBreakTime2] = useState<Time | undefined>();
+  const [breakTime3, setBreakTime3] = useState<Time | undefined>();
+  const [breakTime4, setBreakTime4] = useState<Time | undefined>();
+  const [breakTime5, setBreakTime5] = useState<Time | undefined>();
+  const [breakTime6, setBreakTime6] = useState<Time | undefined>();
+  const [breakTime7, setBreakTime7] = useState<Time | undefined>();
+  const [breakTime8, setBreakTime8] = useState<Time | undefined>();
+
+  const [isActiveBreaking1, setIsActiveBreaking1] = useState(false);
+  const [isActiveBreaking2, setIsActiveBreaking2] = useState(false);
+  const [isActiveBreaking3, setIsActiveBreaking3] = useState(false);
+  const [isActiveBreaking4, setIsActiveBreaking4] = useState(false);
 
   const [buttonText, setButtonText] = useState('not working.');
   const [breakButtonText, setBreakButtonText] = useState('Off break');
+
+  const [demoText, setDemoText] = useState('not working.');
 
   useEffect(() => {
     setInterval(() => {
@@ -44,14 +57,6 @@ export const App = () => {
 
     getElapsedTime();
   }, [date]);
-
-  useEffect(() => {
-    setStartText(formatTime(workStartTime));
-  }, [workStartTime]);
-
-  useEffect(() => {
-    setEndText(formatTime(workEndTime));
-  }, [workEndTime]);
 
   const workStartClear = () => {
     setWorkStartTime(undefined);
@@ -104,7 +109,54 @@ export const App = () => {
     return `${formattedHour}:${formattedMinutes}`;
   };
 
-  const handleChangeStart = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const setTime = (index: number, time: Time) => {
+    switch (index) {
+      case 0:
+        setWorkStartTime(time);
+        break;
+      case 1:
+        setWorkEndTime(time);
+        break;
+      case 2:
+        setBreakTime1(time);
+        break;
+      case 3:
+        setBreakTime2(time);
+        break;
+      case 4:
+        setBreakTime3(time);
+        break;
+      case 5:
+        setBreakTime4(time);
+        break;
+      case 6:
+        setBreakTime5(time);
+        break;
+      case 7:
+        setBreakTime6(time);
+        break;
+      case 8:
+        setBreakTime7(time);
+        break;
+      case 9:
+        setBreakTime8(time);
+        break;
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    // arg1
+    // 0 = 開始時間、setWorkStartTime
+    // 1 = 終了時間、setWorkEndTime
+    // 2 = 休憩時間①
+    // 3 = 休憩時間①
+    // 4 = 休憩時間②
+    // 5 = 休憩時間②
+    // 6 = 休憩時間③
+    // 7 = 休憩時間③
+    // 8 = 休憩時間④
+    // 9 = 休憩時間④
+
     const inputVal = event.target.value;
     let formattedVal = inputVal.replace(/[^0-9:]/g, ''); // 数値とコロン以外を取り除く
     formattedVal = formattedVal.replace(/:+/g, ':'); // 連続するコロンを1つにまとめる
@@ -122,40 +174,13 @@ export const App = () => {
     }
 
     formattedVal = formattedVal.replace(/:+/g, ':'); // 2つ以上連続したコロンを1つに置換する
-    setStartText(formattedVal);
 
     if (formattedVal.length === 5 && formattedVal.includes(':')) {
       const newStr = formattedVal.replace(/:/g, '');
       const hour = newStr.substr(0, 2);
       const minute = newStr.substr(2, 2);
-      setWorkStartTime({ h: Number(hour), m: Number(minute), s: 0 });
-    }
-  };
-
-  const handleChangeEnd = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputVal = event.target.value;
-    let formattedVal = inputVal.replace(/[^0-9:]/g, ''); // 数値とコロン以外を取り除く
-    formattedVal = formattedVal.replace(/:+/g, ':'); // 連続するコロンを1つにまとめる
-    if (formattedVal.length === 4) {
-      // 4桁の場合はHH:MM形式に変換する
-      const hour = formattedVal.substr(0, 2);
-      const minute = formattedVal.substr(2, 2);
-      formattedVal = `${hour}:${minute}`;
-    } else if (formattedVal.length > 4) {
-      // 5桁以上の場合は、末尾から4桁だけをHH:MM形式に変換する
-      formattedVal = formattedVal.substr(-4);
-      const hour = formattedVal.substr(0, 2);
-      const minute = formattedVal.substr(2, 2);
-      formattedVal = `${hour}:${minute}`;
-    }
-    formattedVal = formattedVal.replace(/:+/g, ':'); // 2つ以上連続したコロンを1つに置換する
-    setEndText(formattedVal);
-
-    if (formattedVal.length === 5 && formattedVal.includes(':')) {
-      const newStr = formattedVal.replace(/:/g, '');
-      const hour = newStr.substr(0, 2);
-      const minute = newStr.substr(2, 2);
-      setWorkEndTime({ h: Number(hour), m: Number(minute), s: 0 });
+      const time: Time = { h: Number(hour), m: Number(minute), s: 0 };
+      setTime(index, time);
     }
   };
 
@@ -172,12 +197,135 @@ export const App = () => {
     setIsWorking(!isWorking);
   };
 
+  useEffect(() => {
+    if (breakTime1 || breakTime2) {
+      setIsActiveBreaking1(true);
+    } else {
+      setIsActiveBreaking1(false);
+    }
+    if (breakTime3 || breakTime4) {
+      setIsActiveBreaking2(true);
+    } else {
+      setIsActiveBreaking2(false);
+    }
+    if (breakTime5 || breakTime6) {
+      setIsActiveBreaking3(true);
+    } else {
+      setIsActiveBreaking3(false);
+    }
+    if (breakTime7 || breakTime8) {
+      setIsActiveBreaking4(true);
+    } else {
+      setIsActiveBreaking4(false);
+    }
+  }, [
+    breakTime1,
+    breakTime2,
+    breakTime3,
+    breakTime4,
+    breakTime5,
+    breakTime6,
+    breakTime7,
+    breakTime8,
+  ]);
+
+  const setBreakTime = () => {
+    // 整理する
+    type TimeRange = {
+      start: Time | undefined;
+      end: Time | undefined;
+    };
+    let a: TimeRange = { start: breakTime1, end: breakTime2 };
+    let b: TimeRange = { start: breakTime3, end: breakTime4 };
+    let c: TimeRange = { start: breakTime5, end: breakTime6 };
+    let d: TimeRange = { start: breakTime7, end: breakTime8 };
+    let timeRanges: TimeRange[] = [a, b, c, d];
+
+    let filteredTimeRanges: TimeRange[] = timeRanges
+      .filter((timeRange) => timeRange.start !== undefined || timeRange.end !== undefined)
+      .map((timeRange) => {
+        return {
+          start: timeRange.start!,
+          end: timeRange.end!,
+        };
+      });
+
+    setBreakTime1(
+      filteredTimeRanges[0] && filteredTimeRanges[0].start ? filteredTimeRanges[0].start : undefined
+    );
+    setBreakTime2(
+      filteredTimeRanges[0] && filteredTimeRanges[0].end ? filteredTimeRanges[0].end : undefined
+    );
+    setBreakTime3(filteredTimeRanges[1] ? filteredTimeRanges[1].start : undefined);
+    setBreakTime4(filteredTimeRanges[1] ? filteredTimeRanges[1].end : undefined);
+    setBreakTime5(filteredTimeRanges[2] ? filteredTimeRanges[2].start : undefined);
+    setBreakTime6(filteredTimeRanges[2] ? filteredTimeRanges[2].end : undefined);
+    setBreakTime7(filteredTimeRanges[3] ? filteredTimeRanges[3].start : undefined);
+    setBreakTime8(filteredTimeRanges[3] ? filteredTimeRanges[3].end : undefined);
+
+    let index: number = filteredTimeRanges.length;
+
+    // 休憩じゃない状態→休憩
+    // 開始を見る
+    if (!isBreaking) {
+    }
+    // 休憩→休憩じゃない状態
+    // 終了を見る
+    else {
+      if (index > 0) {
+        if (!filteredTimeRanges[index - 1].end) index--;
+      }
+    }
+
+    switch (index) {
+      case 0:
+        {
+          if (!isBreaking) {
+            setBreakTime1({ h: h, m: m, s: s });
+          } else {
+            setBreakTime2({ h: h, m: m, s: s });
+          }
+        }
+        break;
+      case 1:
+        {
+          if (!isBreaking) {
+            setBreakTime3({ h: h, m: m, s: s });
+          } else {
+            setBreakTime4({ h: h, m: m, s: s });
+          }
+        }
+        break;
+      case 2:
+        {
+          if (!isBreaking) {
+            setBreakTime5({ h: h, m: m, s: s });
+          } else {
+            setBreakTime6({ h: h, m: m, s: s });
+          }
+        }
+        break;
+      case 3:
+        {
+          if (!isBreaking) {
+            setBreakTime7({ h: h, m: m, s: s });
+          } else {
+            setBreakTime8({ h: h, m: m, s: s });
+          }
+        }
+        break;
+    }
+
+    setDemoText(filteredTimeRanges.length.toString());
+  };
+
   const handleClick2 = () => {
     if (isBreaking) {
       setBreakButtonText('Off break');
     } else {
       setBreakButtonText('On break');
     }
+    setBreakTime();
     setIsBreaking(!isBreaking);
   };
 
@@ -252,17 +400,146 @@ export const App = () => {
             type="text"
             id="startTime"
             name="name"
-            value={startText}
+            value={formatTime(workStartTime)}
             required
             minLength={parseInt('4')}
             maxLength={parseInt('5')}
-            onChange={handleChangeStart}
+            onChange={(e) => handleChange(e, 0)}
           />
         </div>
         <button className="ui tiny icon button" onClick={workStartClear}>
           <i aria-hidden="true" className="undo icon"></i>
         </button>
       </div>
+      <label htmlFor="name">{demoText}</label>
+      {isActiveBreaking1 && (
+        <div>
+          <label htmlFor="name">休憩時間①:</label>
+          <div className="ui mini input">
+            <input
+              type="text"
+              id="startTime"
+              name="name"
+              value={formatTime(breakTime1)}
+              required
+              minLength={parseInt('4')}
+              maxLength={parseInt('5')}
+              style={{ width: '75px' }}
+              onChange={(e) => handleChange(e, 2)}
+            />
+          </div>
+          <label htmlFor="name">〜</label>
+          <div className="ui mini input">
+            <input
+              type="text"
+              id="startTime"
+              name="name"
+              value={formatTime(breakTime2)}
+              required
+              minLength={parseInt('4')}
+              maxLength={parseInt('5')}
+              style={{ width: '75px' }}
+              onChange={(e) => handleChange(e, 3)}
+            />
+          </div>
+        </div>
+      )}
+      {isActiveBreaking2 && (
+        <div>
+          <label htmlFor="name">休憩時間②:</label>
+          <div className="ui mini input">
+            <input
+              type="text"
+              id="startTime"
+              name="name"
+              value={formatTime(breakTime3)}
+              required
+              minLength={parseInt('4')}
+              maxLength={parseInt('5')}
+              style={{ width: '75px' }}
+              onChange={(e) => handleChange(e, 4)}
+            />
+          </div>
+          <label htmlFor="name">〜</label>
+          <div className="ui mini input">
+            <input
+              type="text"
+              id="startTime"
+              name="name"
+              value={formatTime(breakTime4)}
+              required
+              minLength={parseInt('4')}
+              maxLength={parseInt('5')}
+              style={{ width: '75px' }}
+              onChange={(e) => handleChange(e, 5)}
+            />
+          </div>
+        </div>
+      )}
+      {isActiveBreaking3 && (
+        <div>
+          <label htmlFor="name">休憩時間③:</label>
+          <div className="ui mini input">
+            <input
+              type="text"
+              id="startTime"
+              name="name"
+              value={formatTime(breakTime5)}
+              required
+              minLength={parseInt('4')}
+              maxLength={parseInt('5')}
+              style={{ width: '75px' }}
+              onChange={(e) => handleChange(e, 6)}
+            />
+          </div>
+          <label htmlFor="name">〜</label>
+          <div className="ui mini input">
+            <input
+              type="text"
+              id="startTime"
+              name="name"
+              value={formatTime(breakTime6)}
+              required
+              minLength={parseInt('4')}
+              maxLength={parseInt('5')}
+              style={{ width: '75px' }}
+              onChange={(e) => handleChange(e, 7)}
+            />
+          </div>
+        </div>
+      )}
+      {isActiveBreaking4 && (
+        <div>
+          <label htmlFor="name">休憩時間④:</label>
+          <div className="ui mini input">
+            <input
+              type="text"
+              id="startTime"
+              name="name"
+              value={formatTime(breakTime7)}
+              required
+              minLength={parseInt('4')}
+              maxLength={parseInt('5')}
+              style={{ width: '75px' }}
+              onChange={(e) => handleChange(e, 8)}
+            />
+          </div>
+          <label htmlFor="name">〜</label>
+          <div className="ui mini input">
+            <input
+              type="text"
+              id="startTime"
+              name="name"
+              value={formatTime(breakTime8)}
+              required
+              minLength={parseInt('4')}
+              maxLength={parseInt('5')}
+              style={{ width: '75px' }}
+              onChange={(e) => handleChange(e, 9)}
+            />
+          </div>
+        </div>
+      )}
       <div>
         <label htmlFor="name">終了時間:</label>
         <div className="ui mini input">
@@ -270,11 +547,11 @@ export const App = () => {
             type="text"
             id="endTime"
             name="name"
-            value={endText}
+            value={formatTime(workEndTime)}
             required
             minLength={parseInt('4')}
             maxLength={parseInt('5')}
-            onChange={handleChangeEnd}
+            onChange={(e) => handleChange(e, 1)}
           />
         </div>
         <button className="ui tiny icon button" onClick={workEndClear}>
