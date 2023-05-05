@@ -1,17 +1,38 @@
 import './App.css';
 import React from 'react';
 import { useEffect, useState, useCallback, useRef } from 'react';
+import 'semantic-ui-css/semantic.min.css';
+import { Button, Label, Icon } from 'semantic-ui-react';
 
 interface Time {
   h: number;
   m: number;
   s: number;
 }
+const ButtonExampleButton = () => <Button>Click Here</Button>;
+
+export default ButtonExampleButton;
 
 export const App = () => {
   const [date, setDate] = useState(new Date());
   const time = [date.getHours(), date.getMinutes(), date.getSeconds()];
   const [h, m, s] = time;
+  const [isWorking, setIsWorking] = useState(false);
+  const [isBreaking, setIsBreaking] = useState(false);
+
+  const [targetH, setTargetH] = useState<number | undefined>(8);
+  const [targetM, setTargetM] = useState<number | undefined>(0);
+
+  const [elapsedTime, setElapsedTime] = useState<Time | undefined>();
+
+  const [startText, setStartText] = useState<string>();
+  const [endText, setEndText] = useState<string>();
+
+  const [workStartTime, setWorkStartTime] = useState<Time | undefined>();
+  const [workEndTime, setWorkEndTime] = useState<Time | undefined>();
+
+  const [buttonText, setButtonText] = useState('not working.');
+  const [breakButtonText, setBreakButtonText] = useState('Off break');
 
   useEffect(() => {
     setInterval(() => {
@@ -20,23 +41,9 @@ export const App = () => {
 
     // Get time
     setDate(date);
-    // const time = [date.getHours(), date.getMinutes(), date.getSeconds()];
-    // const [h, m, s] = time;
 
-    // Get angles
-    const degHour = h * (360 / 12) + m * (360 / 12 / 60);
-    const degMin = m * (360 / 60) + s * (360 / 60 / 60);
-    const degSec = s * (360 / 60);
     getElapsedTime();
   }, [date]);
-  const [elapsedTime, setElapsedTime] = useState<Time | undefined>();
-
-  const [startText, setStartText] = useState<string>();
-  const [endText, setEndText] = useState<string>();
-
-  const [workStartTime, setWorkStartTime] = useState<Time | undefined>();
-  const [workEndTime, setWorkEndTime] = useState<Time | undefined>();
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setStartText(formatTime(workStartTime));
@@ -46,14 +53,6 @@ export const App = () => {
     setEndText(formatTime(workEndTime));
   }, [workEndTime]);
 
-  const workStart = () => {
-    setWorkStartTime({ h: date.getHours(), m: date.getMinutes(), s: date.getSeconds() });
-    getElapsedTime();
-  };
-  const workEnd = () => {
-    setWorkEndTime({ h: date.getHours(), m: date.getMinutes(), s: date.getSeconds() });
-    getElapsedTime();
-  };
   const workStartClear = () => {
     setWorkStartTime(undefined);
     getElapsedTime();
@@ -160,40 +159,160 @@ export const App = () => {
     }
   };
 
+  const handleClick1 = () => {
+    if (isWorking) {
+      setButtonText('not working.');
+      setWorkEndTime({ h: date.getHours(), m: date.getMinutes(), s: date.getSeconds() });
+      getElapsedTime();
+    } else {
+      setButtonText('working!');
+      setWorkStartTime({ h: date.getHours(), m: date.getMinutes(), s: date.getSeconds() });
+      getElapsedTime();
+    }
+    setIsWorking(!isWorking);
+  };
+
+  const handleClick2 = () => {
+    if (isBreaking) {
+      setBreakButtonText('Off break');
+    } else {
+      setBreakButtonText('On break');
+    }
+    setIsBreaking(!isBreaking);
+  };
+
+  const handleChangeTargetH = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value === '') {
+      setTargetH(undefined);
+    } else {
+      setTargetH(Number(event.target.value));
+    }
+  };
+  const handleChangeTargetM = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value === '') {
+      setTargetM(undefined);
+    } else {
+      setTargetM(Number(event.target.value));
+    }
+  };
+
+  function addTime() {
+    if (!workStartTime) return `--:--`;
+    let hour: number = workStartTime.h;
+    let minute: number = workStartTime.m;
+    let second: number = workStartTime.s;
+    let addHour: number = Number(targetH);
+    let addMinute: number = Number(targetM);
+    // 1時間 = 60分、1分 = 60秒として、分と秒について計算
+    var totalSecond = (hour + addHour) * 3600 + (minute + addMinute) * 60 + second;
+    var newHour = Math.floor(totalSecond / 3600);
+    var newMinute = Math.floor((totalSecond % 3600) / 60);
+    var newSecond = totalSecond % 60;
+
+    // 24時間以上の場合は、0〜23時の範囲に収める
+    newHour = newHour % 24;
+
+    // 時、分、秒の桁数が1桁の場合、先頭に0をつける
+    var newHour2 = ('00' + newHour).slice(-2);
+    var newMinute2 = ('00' + newMinute).slice(-2);
+
+    return `${newHour2}:${newMinute2}`;
+  }
+
   return (
     <div className="container">
-      {h.toString().padStart(2, '0')}:{m.toString().padStart(2, '0')}:
-      {s.toString().padStart(2, '0')}
-      <h1>Hello!!</h1>
-      <div>{elapsedTime ? `経過時間：${formatTime(elapsedTime)}` : '経過時間：--:--'}</div>
-      {/* <div>{workStartTime ? `開始時間：${formatTime(workStartTime)}` : '開始時間：--:--'}</div> */}
-      <label htmlFor="name">開始時間:</label>
-      <input
-        type="text"
-        id="startTime"
-        name="name"
-        value={startText}
-        required
-        minLength={parseInt('4')}
-        maxLength={parseInt('5')}
-        onChange={handleChangeStart}
-      ></input>
-      <button onClick={workStart}>出社</button>
-      <button onClick={workStartClear}>クリア</button>
-      {/* <div>{workEndTime ? `${formatTime(workEndTime)}` : '終了時間：--:--'}</div> */}
-      <label htmlFor="name">終了時間:</label>
-      <input
-        type="text"
-        id="endTime"
-        name="name"
-        value={endText}
-        required
-        minLength={parseInt('4')}
-        maxLength={parseInt('5')}
-        onChange={handleChangeEnd}
-      ></input>
-      <button onClick={workEnd}>退社</button>
-      <button onClick={workEndClear}>クリア</button>
+      <p>
+        <h1>
+          {h.toString().padStart(2, '0')}:{m.toString().padStart(2, '0')}:
+          {s.toString().padStart(2, '0')}
+        </h1>
+      </p>
+      <div>
+        <p>{elapsedTime ? `経過時間：${formatTime(elapsedTime)}` : '経過時間：--:--'}</p>
+      </div>
+      <div>
+        <Button id="toggleButton1" toggle active={isWorking} onClick={handleClick1}>
+          {buttonText}
+        </Button>
+        <Button
+          id="toggleButton2"
+          toggle
+          active={isBreaking}
+          disabled={!isWorking}
+          onClick={handleClick2}
+        >
+          {breakButtonText}
+        </Button>
+      </div>
+      <div></div>
+      <div>
+        <label htmlFor="name">開始時間:</label>
+        <div className="ui mini input">
+          <input
+            type="text"
+            id="startTime"
+            name="name"
+            value={startText}
+            required
+            minLength={parseInt('4')}
+            maxLength={parseInt('5')}
+            onChange={handleChangeStart}
+          />
+        </div>
+        <button className="ui tiny icon button" onClick={workStartClear}>
+          <i aria-hidden="true" className="undo icon"></i>
+        </button>
+      </div>
+      <div>
+        <label htmlFor="name">終了時間:</label>
+        <div className="ui mini input">
+          <input
+            type="text"
+            id="endTime"
+            name="name"
+            value={endText}
+            required
+            minLength={parseInt('4')}
+            maxLength={parseInt('5')}
+            onChange={handleChangeEnd}
+          />
+        </div>
+        <button className="ui tiny icon button" onClick={workEndClear}>
+          <i aria-hidden="true" className="undo icon"></i>
+        </button>
+      </div>
+      <div>
+        <label htmlFor="name">目標時間:</label>
+        <div className="ui mini input">
+          <input
+            type="text"
+            name="name"
+            value={targetH}
+            required
+            minLength={parseInt('1')}
+            maxLength={parseInt('2')}
+            style={{ width: '50px' }}
+            onChange={handleChangeTargetH}
+          />
+        </div>
+        <label htmlFor="name">h</label>
+        <div className="ui mini input">
+          <input
+            type="text"
+            name="name"
+            value={targetM}
+            required
+            minLength={parseInt('1')}
+            maxLength={parseInt('2')}
+            style={{ width: '50px' }}
+            onChange={handleChangeTargetM}
+          />
+        </div>
+        <label htmlFor="name">m</label>
+      </div>
+      <div>
+        <label htmlFor="name">{addTime()}</label>
+      </div>
     </div>
   );
 };
