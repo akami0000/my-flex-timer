@@ -1,6 +1,13 @@
 import './App.css';
 import React from 'react';
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Box from '@material-ui/core/Box';
+import { Grid } from '@material-ui/core';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import Button from '@mui/material/Button'; // Button UIをインストール
 
 interface Time {
   h: number;
@@ -161,39 +168,45 @@ export const App = () => {
   };
 
   return (
-    <div className="container">
-      {h.toString().padStart(2, '0')}:{m.toString().padStart(2, '0')}:
-      {s.toString().padStart(2, '0')}
-      <h1>Hello!!</h1>
-      <div>{elapsedTime ? `経過時間：${formatTime(elapsedTime)}` : '経過時間：--:--'}</div>
-      {/* <div>{workStartTime ? `開始時間：${formatTime(workStartTime)}` : '開始時間：--:--'}</div> */}
-      <label htmlFor="name">開始時間:</label>
-      <input
-        type="text"
-        id="startTime"
-        name="name"
-        value={startText}
-        required
-        minLength={parseInt('4')}
-        maxLength={parseInt('5')}
-        onChange={handleChangeStart}
-      ></input>
-      <button onClick={workStart}>出社</button>
-      <button onClick={workStartClear}>クリア</button>
-      {/* <div>{workEndTime ? `${formatTime(workEndTime)}` : '終了時間：--:--'}</div> */}
-      <label htmlFor="name">終了時間:</label>
-      <input
-        type="text"
-        id="endTime"
-        name="name"
-        value={endText}
-        required
-        minLength={parseInt('4')}
-        maxLength={parseInt('5')}
-        onChange={handleChangeEnd}
-      ></input>
-      <button onClick={workEnd}>退社</button>
-      <button onClick={workEndClear}>クリア</button>
+    // <div className="container">
+    //   {h.toString().padStart(2, '0')}:{m.toString().padStart(2, '0')}:
+    //   {s.toString().padStart(2, '0')}
+    //   <h1>Hello!!</h1>
+    //   <div>{elapsedTime ? `経過時間：${formatTime(elapsedTime)}` : '経過時間：--:--'}</div>
+    //   {/* <div>{workStartTime ? `開始時間：${formatTime(workStartTime)}` : '開始時間：--:--'}</div> */}
+    //   <label htmlFor="name">開始時間:</label>
+    //   <input
+    //     type="text"
+    //     id="startTime"
+    //     name="name"
+    //     value={startText}
+    //     required
+    //     minLength={parseInt('4')}
+    //     maxLength={parseInt('5')}
+    //     onChange={handleChangeStart}
+    //   ></input>
+    //   <button onClick={workStart}>出社</button>
+    //   <button onClick={workStartClear}>クリア</button>
+    //   {/* <div>{workEndTime ? `${formatTime(workEndTime)}` : '終了時間：--:--'}</div> */}
+    //   <label htmlFor="name">終了時間:</label>
+    //   <input
+    //     type="text"
+    //     id="endTime"
+    //     name="name"
+    //     value={endText}
+    //     required
+    //     minLength={parseInt('4')}
+    //     maxLength={parseInt('5')}
+    //     onChange={handleChangeEnd}
+    //   ></input>
+    //   <button onClick={workEnd}>退社</button>
+    //   <button onClick={workEndClear}>クリア</button>
+    //   <Box p={2} bgcolor="primary.dark" width={100} height={100}>
+    //     hoge
+    //   </Box>
+    // </div>
+    <div>
+      <Button variant="contained">ボタン</Button>
     </div>
   );
 };
