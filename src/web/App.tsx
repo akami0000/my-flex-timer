@@ -45,7 +45,7 @@ export const App = () => {
   const [buttonText, setButtonText] = useState('not working.');
   const [breakButtonText, setBreakButtonText] = useState('Off break');
 
-  const [demoText, setDemoText] = useState('not working.');
+  const [breakTimeSum, setBreakTimeSum] = useState<number>(0);
 
   useEffect(() => {
     setInterval(() => {
@@ -66,6 +66,22 @@ export const App = () => {
     console.log('test');
     setWorkEndTime(undefined);
     getElapsedTime();
+  };
+  const break1Clear = () => {
+    setBreakTime1(undefined);
+    setBreakTime2(undefined);
+  };
+  const break2Clear = () => {
+    setBreakTime3(undefined);
+    setBreakTime4(undefined);
+  };
+  const break3Clear = () => {
+    setBreakTime5(undefined);
+    setBreakTime6(undefined);
+  };
+  const break4Clear = () => {
+    setBreakTime7(undefined);
+    setBreakTime8(undefined);
   };
 
   function getElapsedTime() {
@@ -198,6 +214,7 @@ export const App = () => {
   };
 
   useEffect(() => {
+    sortBreakTime();
     if (breakTime1 || breakTime2) {
       setIsActiveBreaking1(true);
     } else {
@@ -229,7 +246,11 @@ export const App = () => {
     breakTime8,
   ]);
 
-  const setBreakTime = () => {
+  const calBreakTime = () => {
+    setBreakTimeSum();
+  };
+
+  const sortBreakTime = (): number => {
     // 整理する
     type TimeRange = {
       start: Time | undefined;
@@ -250,12 +271,8 @@ export const App = () => {
         };
       });
 
-    setBreakTime1(
-      filteredTimeRanges[0] && filteredTimeRanges[0].start ? filteredTimeRanges[0].start : undefined
-    );
-    setBreakTime2(
-      filteredTimeRanges[0] && filteredTimeRanges[0].end ? filteredTimeRanges[0].end : undefined
-    );
+    setBreakTime1(filteredTimeRanges[0] ? filteredTimeRanges[0].start : undefined);
+    setBreakTime2(filteredTimeRanges[0] ? filteredTimeRanges[0].end : undefined);
     setBreakTime3(filteredTimeRanges[1] ? filteredTimeRanges[1].start : undefined);
     setBreakTime4(filteredTimeRanges[1] ? filteredTimeRanges[1].end : undefined);
     setBreakTime5(filteredTimeRanges[2] ? filteredTimeRanges[2].start : undefined);
@@ -264,7 +281,6 @@ export const App = () => {
     setBreakTime8(filteredTimeRanges[3] ? filteredTimeRanges[3].end : undefined);
 
     let index: number = filteredTimeRanges.length;
-
     // 休憩じゃない状態→休憩
     // 開始を見る
     if (!isBreaking) {
@@ -276,6 +292,13 @@ export const App = () => {
         if (!filteredTimeRanges[index - 1].end) index--;
       }
     }
+
+    return index;
+  };
+
+  const setBreakTime = () => {
+    // 整理する
+    let index = sortBreakTime();
 
     switch (index) {
       case 0:
@@ -315,8 +338,6 @@ export const App = () => {
         }
         break;
     }
-
-    setDemoText(filteredTimeRanges.length.toString());
   };
 
   const handleClick2 = () => {
@@ -411,7 +432,6 @@ export const App = () => {
           <i aria-hidden="true" className="undo icon"></i>
         </button>
       </div>
-      <label htmlFor="name">{demoText}</label>
       {isActiveBreaking1 && (
         <div>
           <label htmlFor="name">休憩時間①:</label>
@@ -442,6 +462,9 @@ export const App = () => {
               onChange={(e) => handleChange(e, 3)}
             />
           </div>
+          <button className="ui tiny icon button" onClick={break1Clear}>
+            <i aria-hidden="true" className="undo icon"></i>
+          </button>
         </div>
       )}
       {isActiveBreaking2 && (
@@ -474,6 +497,9 @@ export const App = () => {
               onChange={(e) => handleChange(e, 5)}
             />
           </div>
+          <button className="ui tiny icon button" onClick={break2Clear}>
+            <i aria-hidden="true" className="undo icon"></i>
+          </button>
         </div>
       )}
       {isActiveBreaking3 && (
@@ -506,6 +532,9 @@ export const App = () => {
               onChange={(e) => handleChange(e, 7)}
             />
           </div>
+          <button className="ui tiny icon button" onClick={break3Clear}>
+            <i aria-hidden="true" className="undo icon"></i>
+          </button>
         </div>
       )}
       {isActiveBreaking4 && (
@@ -538,6 +567,9 @@ export const App = () => {
               onChange={(e) => handleChange(e, 9)}
             />
           </div>
+          <button className="ui tiny icon button" onClick={break4Clear}>
+            <i aria-hidden="true" className="undo icon"></i>
+          </button>
         </div>
       )}
       <div>
