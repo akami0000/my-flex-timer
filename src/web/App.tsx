@@ -11,9 +11,12 @@ interface Time {
 }
 
 export const App = () => {
-  const [date, setDate] = useState(new Date());
-  const time = [date.getHours(), date.getMinutes(), date.getSeconds()];
-  const [h, m, s] = time;
+  let newDate = new Date();
+  const [date, setDate] = useState<Time>({
+    h: newDate.getHours(),
+    m: newDate.getMinutes(),
+    s: newDate.getSeconds(),
+  });
   const [isWorking, setIsWorking] = useState(false);
   const [isBreaking, setIsBreaking] = useState(false);
 
@@ -45,7 +48,12 @@ export const App = () => {
 
   useEffect(() => {
     setInterval(() => {
-      setDate(new Date());
+      let newDate = new Date();
+      setDate({
+        h: newDate.getHours(),
+        m: newDate.getMinutes(),
+        s: newDate.getSeconds(),
+      });
     }, 1000);
 
     // Get time
@@ -110,7 +118,7 @@ export const App = () => {
     if (!workEndTime) {
       let time = calcTimeDifference(
         { h: workStartTime.h, m: workStartTime.m, s: workStartTime.s },
-        { h: date.getHours(), m: date.getMinutes(), s: date.getSeconds() }
+        date
       );
       if (breakTimeSum) {
         time = calcTimeDifference(
@@ -223,12 +231,10 @@ export const App = () => {
   const handleClick1 = () => {
     if (isWorking) {
       setButtonText('not working.');
-      setWorkEndTime({ h: date.getHours(), m: date.getMinutes(), s: date.getSeconds() });
-      getElapsedTime();
+      setWorkEndTime(date);
     } else {
       setButtonText('working!');
-      setWorkStartTime({ h: date.getHours(), m: date.getMinutes(), s: date.getSeconds() });
-      getElapsedTime();
+      setWorkStartTime(date);
     }
     setIsWorking(!isWorking);
   };
@@ -274,28 +280,28 @@ export const App = () => {
       let time = calcTimeDifference(breakTime1, breakTime2);
       timeSec += time.h * 3600 + time.m * 60 + time.s;
     } else if (breakTime1 && isBreaking) {
-      let time = calcTimeDifference(breakTime1, { h: h, m: m, s: s });
+      let time = calcTimeDifference(breakTime1, date);
       timeSec += time.h * 3600 + time.m * 60 + time.s;
     }
     if (breakTime3 && breakTime4) {
       let time = calcTimeDifference(breakTime3, breakTime4);
       timeSec += time.h * 3600 + time.m * 60 + time.s;
     } else if (breakTime3 && isBreaking) {
-      let time = calcTimeDifference(breakTime3, { h: h, m: m, s: s });
+      let time = calcTimeDifference(breakTime3, date);
       timeSec += time.h * 3600 + time.m * 60 + time.s;
     }
     if (breakTime5 && breakTime6) {
       let time = calcTimeDifference(breakTime5, breakTime6);
       timeSec += time.h * 3600 + time.m * 60 + time.s;
     } else if (breakTime5 && isBreaking) {
-      let time = calcTimeDifference(breakTime5, { h: h, m: m, s: s });
+      let time = calcTimeDifference(breakTime5, date);
       timeSec += time.h * 3600 + time.m * 60 + time.s;
     }
     if (breakTime7 && breakTime8) {
       let time = calcTimeDifference(breakTime7, breakTime8);
       timeSec += time.h * 3600 + time.m * 60 + time.s;
     } else if (breakTime7 && isBreaking) {
-      let time = calcTimeDifference(breakTime7, { h: h, m: m, s: s });
+      let time = calcTimeDifference(breakTime7, date);
       timeSec += time.h * 3600 + time.m * 60 + time.s;
     }
 
@@ -366,36 +372,36 @@ export const App = () => {
       case 0:
         {
           if (!isBreaking) {
-            setBreakTime1({ h: h, m: m, s: s });
+            setBreakTime1(date);
           } else {
-            setBreakTime2({ h: h, m: m, s: s });
+            setBreakTime2(date);
           }
         }
         break;
       case 1:
         {
           if (!isBreaking) {
-            setBreakTime3({ h: h, m: m, s: s });
+            setBreakTime3(date);
           } else {
-            setBreakTime4({ h: h, m: m, s: s });
+            setBreakTime4(date);
           }
         }
         break;
       case 2:
         {
           if (!isBreaking) {
-            setBreakTime5({ h: h, m: m, s: s });
+            setBreakTime5(date);
           } else {
-            setBreakTime6({ h: h, m: m, s: s });
+            setBreakTime6(date);
           }
         }
         break;
       case 3:
         {
           if (!isBreaking) {
-            setBreakTime7({ h: h, m: m, s: s });
+            setBreakTime7(date);
           } else {
-            setBreakTime8({ h: h, m: m, s: s });
+            setBreakTime8(date);
           }
         }
         break;
@@ -461,8 +467,8 @@ export const App = () => {
     <div className="container">
       <p>
         <h1>
-          {h.toString().padStart(2, '0')}:{m.toString().padStart(2, '0')}:
-          {s.toString().padStart(2, '0')}
+          {date.h.toString().padStart(2, '0')}:{date.m.toString().padStart(2, '0')}:
+          {date.s.toString().padStart(2, '0')}
         </h1>
       </p>
       <div>
