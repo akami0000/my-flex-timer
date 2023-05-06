@@ -50,7 +50,6 @@ export const App = () => {
         m: newDate.getMinutes(),
         s: newDate.getSeconds(),
       });
-      console.log('1秒に1回くらい？');
     }, 1000);
   }, []);
 
@@ -289,6 +288,11 @@ export const App = () => {
   ]);
 
   const calcBreakTime = () => {
+    if (!workStartTime) {
+      setBreakTimeSum(undefined);
+      return;
+    }
+
     let timeSec = 0;
 
     if (breakTime1 && breakTime2) {
