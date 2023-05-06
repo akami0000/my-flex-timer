@@ -9,5 +9,6 @@ npm run dev
 
 # ビルド
 ```
-npm run build
+npm run build:mac
+npm run build:win
 ```
