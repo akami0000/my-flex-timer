@@ -1,7 +1,13 @@
 # my-flex-timer
 フレックス勤務用の勤務時間を計測するアプリ
 
+# 動作確認
+```
+npm install
 npm run dev
+```
 
-Chrome DevTools
-Command+Option+I 
+# ビルド
+```
+npm run build
+```
