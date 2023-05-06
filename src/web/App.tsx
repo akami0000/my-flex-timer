@@ -484,12 +484,10 @@ export const App = () => {
 
   return (
     <div className="container">
-      <p>
-        <h1>
-          {date.h.toString().padStart(2, '0')}:{date.m.toString().padStart(2, '0')}:
-          {date.s.toString().padStart(2, '0')}
-        </h1>
-      </p>
+      <h1>
+        {date.h.toString().padStart(2, '0')}:{date.m.toString().padStart(2, '0')}:
+        {date.s.toString().padStart(2, '0')}
+      </h1>
       <div>
         <p>{elapsedTime ? `経過時間：${formatTime(elapsedTime)}` : '経過時間：--:--'}</p>
       </div>
@@ -513,7 +511,6 @@ export const App = () => {
           {breakButtonText}
         </Button>
       </div>
-      <div></div>
       <div>
         <label htmlFor="name">開始時間:</label>
         <div className="ui mini input">
@@ -538,7 +535,6 @@ export const App = () => {
           <div className="ui mini input">
             <input
               type="text"
-              id="startTime"
               name="name"
               value={formatTime(breakTime1)}
               required
@@ -552,7 +548,6 @@ export const App = () => {
           <div className="ui mini input">
             <input
               type="text"
-              id="startTime"
               name="name"
               value={formatTime(breakTime2)}
               required
@@ -573,7 +568,6 @@ export const App = () => {
           <div className="ui mini input">
             <input
               type="text"
-              id="startTime"
               name="name"
               value={formatTime(breakTime3)}
               required
@@ -587,7 +581,6 @@ export const App = () => {
           <div className="ui mini input">
             <input
               type="text"
-              id="startTime"
               name="name"
               value={formatTime(breakTime4)}
               required
@@ -608,7 +601,6 @@ export const App = () => {
           <div className="ui mini input">
             <input
               type="text"
-              id="startTime"
               name="name"
               value={formatTime(breakTime5)}
               required
@@ -622,7 +614,6 @@ export const App = () => {
           <div className="ui mini input">
             <input
               type="text"
-              id="startTime"
               name="name"
               value={formatTime(breakTime6)}
               required
@@ -643,7 +634,6 @@ export const App = () => {
           <div className="ui mini input">
             <input
               type="text"
-              id="startTime"
               name="name"
               value={formatTime(breakTime7)}
               required
@@ -657,7 +647,6 @@ export const App = () => {
           <div className="ui mini input">
             <input
               type="text"
-              id="startTime"
               name="name"
               value={formatTime(breakTime8)}
               required
