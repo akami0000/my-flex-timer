@@ -484,232 +484,274 @@ export const App = () => {
 
   return (
     <div className="container">
-      <h1>
-        {date.h.toString().padStart(2, '0')}:{date.m.toString().padStart(2, '0')}:
-        {date.s.toString().padStart(2, '0')}
-      </h1>
-      <div>
-        <p>{elapsedTime ? `経過時間：${formatTime(elapsedTime)}` : '経過時間：--:--'}</p>
-      </div>
-      <div>
-        <p>{breakTimeSum ? `休憩時間：${formatTime(breakTimeSum)}` : '休憩時間：--:--'}</p>
-      </div>
-      <div>
-        <button className="ui button" onClick={allClear}>
-          All Clear
-        </button>
-        <Button id="toggleButton1" toggle active={isWorking} onClick={handleClick1}>
-          {buttonText}
+      <div
+        className="box"
+        style={{
+          textAlign: 'right',
+        }}
+      >
+        <Button className="ui button" onClick={allClear}>
+          Reset
         </Button>
-        <Button
-          id="toggleButton2"
-          toggle
-          active={isBreaking}
-          disabled={!isWorking}
-          onClick={handleClick2}
+      </div>
+      <div className="content">
+        <div
+          className="box"
+          style={
+            {
+              // marginTop: '50px',
+            }
+          }
         >
-          {breakButtonText}
-        </Button>
-      </div>
-      <div>
-        <label htmlFor="name">開始時間:</label>
-        <div className="ui mini input">
-          <input
-            type="text"
-            id="startTime"
-            name="name"
-            value={formatTime(workStartTime)}
-            required
-            minLength={parseInt('4')}
-            maxLength={parseInt('5')}
-            onChange={(e) => handleChange(e, 0)}
-          />
+          <h1>
+            {date.h.toString().padStart(2, '0')}:{date.m.toString().padStart(2, '0')}:
+            {date.s.toString().padStart(2, '0')}
+          </h1>
         </div>
-        <button className="ui tiny icon button" onClick={workStartClear}>
-          <i aria-hidden="true" className="undo icon"></i>
-        </button>
-      </div>
-      {isActiveBreaking1 && (
         <div>
-          <label htmlFor="name">休憩時間①:</label>
+          <p>{elapsedTime ? `経過時間：${formatTime(elapsedTime)}` : '経過時間：--:--'}</p>
+        </div>
+        <div>
+          <Button id="toggleButton1" toggle active={isWorking} onClick={handleClick1}>
+            {buttonText}
+          </Button>
+          <Button
+            id="toggleButton2"
+            toggle
+            active={isBreaking}
+            disabled={!isWorking}
+            onClick={handleClick2}
+          >
+            {breakButtonText}
+          </Button>
+        </div>
+        <div className="top">
+          <label htmlFor="name" className="right">
+            開始時間:
+          </label>
           <div className="ui mini input">
             <input
               type="text"
+              id="startTime"
               name="name"
-              value={formatTime(breakTime1)}
+              value={formatTime(workStartTime)}
               required
               minLength={parseInt('4')}
               maxLength={parseInt('5')}
-              style={{ width: '75px' }}
-              onChange={(e) => handleChange(e, 2)}
+              onChange={(e) => handleChange(e, 0)}
+              style={{
+                width: '75px',
+                textAlign: 'center',
+              }}
             />
           </div>
-          <label htmlFor="name">〜</label>
-          <div className="ui mini input">
-            <input
-              type="text"
-              name="name"
-              value={formatTime(breakTime2)}
-              required
-              minLength={parseInt('4')}
-              maxLength={parseInt('5')}
-              style={{ width: '75px' }}
-              onChange={(e) => handleChange(e, 3)}
-            />
-          </div>
-          <button className="ui tiny icon button" onClick={break1Clear}>
+          <button className="ui tiny icon button" onClick={workStartClear}>
             <i aria-hidden="true" className="undo icon"></i>
           </button>
         </div>
-      )}
-      {isActiveBreaking2 && (
-        <div>
-          <label htmlFor="name">休憩時間②:</label>
+        {isActiveBreaking1 && (
+          <div className="top">
+            <label htmlFor="name" className="right">
+              休憩時間①:
+            </label>
+            <div className="ui mini input">
+              <input
+                type="text"
+                name="name"
+                value={formatTime(breakTime1)}
+                required
+                minLength={parseInt('4')}
+                maxLength={parseInt('5')}
+                style={{ width: '75px', textAlign: 'center' }}
+                onChange={(e) => handleChange(e, 2)}
+              />
+            </div>
+            <label htmlFor="name">〜</label>
+            <div className="ui mini input">
+              <input
+                type="text"
+                name="name"
+                value={formatTime(breakTime2)}
+                required
+                minLength={parseInt('4')}
+                maxLength={parseInt('5')}
+                style={{ width: '75px', textAlign: 'center' }}
+                onChange={(e) => handleChange(e, 3)}
+              />
+            </div>
+            <button className="ui tiny icon button" onClick={break1Clear}>
+              <i aria-hidden="true" className="undo icon"></i>
+            </button>
+          </div>
+        )}
+        {isActiveBreaking2 && (
+          <div className="top">
+            <label htmlFor="name" className="right">
+              休憩時間②:
+            </label>
+            <div className="ui mini input">
+              <input
+                type="text"
+                name="name"
+                value={formatTime(breakTime3)}
+                required
+                minLength={parseInt('4')}
+                maxLength={parseInt('5')}
+                style={{ width: '75px', textAlign: 'center' }}
+                onChange={(e) => handleChange(e, 4)}
+              />
+            </div>
+            <label htmlFor="name">〜</label>
+            <div className="ui mini input">
+              <input
+                type="text"
+                name="name"
+                value={formatTime(breakTime4)}
+                required
+                minLength={parseInt('4')}
+                maxLength={parseInt('5')}
+                style={{ width: '75px', textAlign: 'center' }}
+                onChange={(e) => handleChange(e, 5)}
+              />
+            </div>
+            <button className="ui tiny icon button" onClick={break2Clear}>
+              <i aria-hidden="true" className="undo icon"></i>
+            </button>
+          </div>
+        )}
+        {isActiveBreaking3 && (
+          <div className="top">
+            <label htmlFor="name" className="right">
+              休憩時間③:
+            </label>
+            <div className="ui mini input">
+              <input
+                type="text"
+                name="name"
+                value={formatTime(breakTime5)}
+                required
+                minLength={parseInt('4')}
+                maxLength={parseInt('5')}
+                style={{ width: '75px', textAlign: 'center' }}
+                onChange={(e) => handleChange(e, 6)}
+              />
+            </div>
+            <label htmlFor="name">〜</label>
+            <div className="ui mini input">
+              <input
+                type="text"
+                name="name"
+                value={formatTime(breakTime6)}
+                required
+                minLength={parseInt('4')}
+                maxLength={parseInt('5')}
+                style={{ width: '75px', textAlign: 'center' }}
+                onChange={(e) => handleChange(e, 7)}
+              />
+            </div>
+            <button className="ui tiny icon button" onClick={break3Clear}>
+              <i aria-hidden="true" className="undo icon"></i>
+            </button>
+          </div>
+        )}
+        {isActiveBreaking4 && (
+          <div className="top">
+            <label htmlFor="name" className="right">
+              休憩時間④:
+            </label>
+            <div className="ui mini input">
+              <input
+                type="text"
+                name="name"
+                value={formatTime(breakTime7)}
+                required
+                minLength={parseInt('4')}
+                maxLength={parseInt('5')}
+                style={{ width: '75px', textAlign: 'center' }}
+                onChange={(e) => handleChange(e, 8)}
+              />
+            </div>
+            <label htmlFor="name">〜</label>
+            <div className="ui mini input">
+              <input
+                type="text"
+                name="name"
+                value={formatTime(breakTime8)}
+                required
+                minLength={parseInt('4')}
+                maxLength={parseInt('5')}
+                style={{ width: '75px', textAlign: 'center' }}
+                onChange={(e) => handleChange(e, 9)}
+              />
+            </div>
+            <button className="ui tiny icon button" onClick={break4Clear}>
+              <i aria-hidden="true" className="undo icon"></i>
+            </button>
+          </div>
+        )}
+        <div className="top bottom">
+          <label htmlFor="name" className="right">
+            終了時間:
+          </label>
           <div className="ui mini input">
             <input
               type="text"
+              id="endTime"
               name="name"
-              value={formatTime(breakTime3)}
+              value={formatTime(workEndTime)}
               required
               minLength={parseInt('4')}
               maxLength={parseInt('5')}
-              style={{ width: '75px' }}
-              onChange={(e) => handleChange(e, 4)}
+              onChange={(e) => handleChange(e, 1)}
+              style={{
+                width: '75px',
+                textAlign: 'center',
+              }}
             />
           </div>
-          <label htmlFor="name">〜</label>
-          <div className="ui mini input">
-            <input
-              type="text"
-              name="name"
-              value={formatTime(breakTime4)}
-              required
-              minLength={parseInt('4')}
-              maxLength={parseInt('5')}
-              style={{ width: '75px' }}
-              onChange={(e) => handleChange(e, 5)}
-            />
-          </div>
-          <button className="ui tiny icon button" onClick={break2Clear}>
+          <button className="ui tiny icon button" onClick={workEndClear}>
             <i aria-hidden="true" className="undo icon"></i>
           </button>
         </div>
-      )}
-      {isActiveBreaking3 && (
+        <div
+          className="box"
+          style={{
+            borderTop: '1px solid gray',
+          }}
+        >
+          <label htmlFor="name" className="right">
+            目標時間:
+          </label>
+          <div className="ui mini input">
+            <input
+              type="text"
+              name="name"
+              value={targetH}
+              required
+              minLength={parseInt('1')}
+              maxLength={parseInt('2')}
+              style={{ width: '50px', textAlign: 'center' }}
+              onChange={handleChangeTargetH}
+            />
+          </div>
+          <label htmlFor="name">h</label>
+          <div className="ui mini input">
+            <input
+              type="text"
+              name="name"
+              value={targetM}
+              required
+              minLength={parseInt('1')}
+              maxLength={parseInt('2')}
+              style={{ width: '50px', textAlign: 'center' }}
+              onChange={handleChangeTargetM}
+            />
+          </div>
+          <label htmlFor="name">m</label>
+        </div>
         <div>
-          <label htmlFor="name">休憩時間③:</label>
-          <div className="ui mini input">
-            <input
-              type="text"
-              name="name"
-              value={formatTime(breakTime5)}
-              required
-              minLength={parseInt('4')}
-              maxLength={parseInt('5')}
-              style={{ width: '75px' }}
-              onChange={(e) => handleChange(e, 6)}
-            />
-          </div>
-          <label htmlFor="name">〜</label>
-          <div className="ui mini input">
-            <input
-              type="text"
-              name="name"
-              value={formatTime(breakTime6)}
-              required
-              minLength={parseInt('4')}
-              maxLength={parseInt('5')}
-              style={{ width: '75px' }}
-              onChange={(e) => handleChange(e, 7)}
-            />
-          </div>
-          <button className="ui tiny icon button" onClick={break3Clear}>
-            <i aria-hidden="true" className="undo icon"></i>
-          </button>
+          <label htmlFor="name">{addTime()}</label>
         </div>
-      )}
-      {isActiveBreaking4 && (
-        <div>
-          <label htmlFor="name">休憩時間④:</label>
-          <div className="ui mini input">
-            <input
-              type="text"
-              name="name"
-              value={formatTime(breakTime7)}
-              required
-              minLength={parseInt('4')}
-              maxLength={parseInt('5')}
-              style={{ width: '75px' }}
-              onChange={(e) => handleChange(e, 8)}
-            />
-          </div>
-          <label htmlFor="name">〜</label>
-          <div className="ui mini input">
-            <input
-              type="text"
-              name="name"
-              value={formatTime(breakTime8)}
-              required
-              minLength={parseInt('4')}
-              maxLength={parseInt('5')}
-              style={{ width: '75px' }}
-              onChange={(e) => handleChange(e, 9)}
-            />
-          </div>
-          <button className="ui tiny icon button" onClick={break4Clear}>
-            <i aria-hidden="true" className="undo icon"></i>
-          </button>
-        </div>
-      )}
-      <div>
-        <label htmlFor="name">終了時間:</label>
-        <div className="ui mini input">
-          <input
-            type="text"
-            id="endTime"
-            name="name"
-            value={formatTime(workEndTime)}
-            required
-            minLength={parseInt('4')}
-            maxLength={parseInt('5')}
-            onChange={(e) => handleChange(e, 1)}
-          />
-        </div>
-        <button className="ui tiny icon button" onClick={workEndClear}>
-          <i aria-hidden="true" className="undo icon"></i>
-        </button>
-      </div>
-      <div>
-        <label htmlFor="name">目標時間:</label>
-        <div className="ui mini input">
-          <input
-            type="text"
-            name="name"
-            value={targetH}
-            required
-            minLength={parseInt('1')}
-            maxLength={parseInt('2')}
-            style={{ width: '50px' }}
-            onChange={handleChangeTargetH}
-          />
-        </div>
-        <label htmlFor="name">h</label>
-        <div className="ui mini input">
-          <input
-            type="text"
-            name="name"
-            value={targetM}
-            required
-            minLength={parseInt('1')}
-            maxLength={parseInt('2')}
-            style={{ width: '50px' }}
-            onChange={handleChangeTargetM}
-          />
-        </div>
-        <label htmlFor="name">m</label>
-      </div>
-      <div>
-        <label htmlFor="name">{addTime()}</label>
       </div>
     </div>
   );

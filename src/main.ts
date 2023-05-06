@@ -4,6 +4,13 @@ import { BrowserWindow, app } from 'electron';
 app.whenReady().then(() => {
   // アプリの起動イベント発火で BrowserWindow インスタンスを作成
   const mainWindow = new BrowserWindow({
+    // 初期表示
+    width: 400,
+    height: 400,
+
+    // ウィンドウサイズの最小
+    minWidth: 400,
+    minHeight: 400,
     webPreferences: {
       // webpack が出力したプリロードスクリプトを読み込み
       preload: path.join(__dirname, 'preload.js'),

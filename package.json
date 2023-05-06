@@ -1,7 +1,8 @@
 {
   "name": "my-flex-timer",
+  "productName": "my-flex-timer",
   "version": "1.0.0",
-  "description": "",
+  "description": "An app to manage flexible work hours.",
   "main": "dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,8 +12,14 @@
     "dev:electron": "wait-on ./dist/index.html ./dist/main.js && electronmon ."
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "akami"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:akami0000/my-flex-timer.git"
+  },
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^18.16.3",
     "@types/react": "^18.2.2",
