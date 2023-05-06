@@ -12,11 +12,7 @@ interface Time {
 
 export const App = () => {
   let newDate = new Date();
-  const [date, setDate] = useState<Time>({
-    h: newDate.getHours(),
-    m: newDate.getMinutes(),
-    s: newDate.getSeconds(),
-  });
+  const [date, setDate] = useState<Time>({ h: 0, m: 0, s: 0 });
   const [isWorking, setIsWorking] = useState(false);
   const [isBreaking, setIsBreaking] = useState(false);
 
@@ -54,17 +50,41 @@ export const App = () => {
         m: newDate.getMinutes(),
         s: newDate.getSeconds(),
       });
+      console.log('1秒に1回くらい？');
     }, 1000);
+  }, []);
 
+  useEffect(() => {
     getElapsedTime();
     calcBreakTime();
   }, [date]);
+
+  const allClear = () => {
+    if (isWorking) {
+      handleClick1();
+    }
+    if (isBreaking) {
+      handleClick2();
+    }
+    setTargetH(8);
+    setTargetM(0);
+
+    setWorkStartTime(undefined);
+    setWorkEndTime(undefined);
+    setBreakTime1(undefined);
+    setBreakTime2(undefined);
+    setBreakTime3(undefined);
+    setBreakTime4(undefined);
+    setBreakTime5(undefined);
+    setBreakTime6(undefined);
+    setBreakTime7(undefined);
+    setBreakTime8(undefined);
+  };
 
   const workStartClear = () => {
     setWorkStartTime(undefined);
   };
   const workEndClear = () => {
-    console.log('test');
     setWorkEndTime(undefined);
   };
   const break1Clear = () => {
@@ -473,6 +493,9 @@ export const App = () => {
         <p>{breakTimeSum ? `休憩時間：${formatTime(breakTimeSum)}` : '休憩時間：--:--'}</p>
       </div>
       <div>
+        <button className="ui button" onClick={allClear}>
+          All Clear
+        </button>
         <Button id="toggleButton1" toggle active={isWorking} onClick={handleClick1}>
           {buttonText}
         </Button>
