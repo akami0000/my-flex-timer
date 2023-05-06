@@ -10,10 +10,6 @@ interface Time {
   s: number;
 }
 
-const ButtonExampleButton = () => <Button>Click Here</Button>;
-
-export default ButtonExampleButton;
-
 export const App = () => {
   const [date, setDate] = useState(new Date());
   const time = [date.getHours(), date.getMinutes(), date.getSeconds()];
@@ -45,7 +41,7 @@ export const App = () => {
   const [buttonText, setButtonText] = useState('not working.');
   const [breakButtonText, setBreakButtonText] = useState('Off break');
 
-  const [breakTimeSum, setBreakTimeSum] = useState<number>(0);
+  const [breakTimeSum, setBreakTimeSum] = useState<Time | undefined>();
 
   useEffect(() => {
     setInterval(() => {
@@ -56,6 +52,7 @@ export const App = () => {
     setDate(date);
 
     getElapsedTime();
+    calcBreakTime();
   }, [date]);
 
   const workStartClear = () => {
@@ -84,24 +81,11 @@ export const App = () => {
     setBreakTime8(undefined);
   };
 
-  function getElapsedTime() {
-    if (!workStartTime) {
-      setElapsedTime(undefined);
-      return;
-    }
-    let elapsedH = 0;
-    let elapsedM = 0;
-    let elapsedS = 0;
+  function calcTimeDifference(start: Time, end: Time): Time {
+    let elapsedH = end.h - start.h;
+    let elapsedM = end.m - start.m;
+    let elapsedS = end.s - start.s;
 
-    if (!workEndTime) {
-      elapsedH = date.getHours() - workStartTime.h;
-      elapsedM = date.getMinutes() - workStartTime.m;
-      elapsedS = date.getSeconds() - workStartTime.s;
-    } else {
-      elapsedH = workEndTime.h - workStartTime.h;
-      elapsedM = workEndTime.m - workStartTime.m;
-      elapsedS = workEndTime.s - workStartTime.s;
-    }
     if (elapsedS < 0) {
       elapsedS += 60;
       elapsedM--;
@@ -113,7 +97,43 @@ export const App = () => {
     if (elapsedH < 0) {
       elapsedH += 24;
     }
-    setElapsedTime({ h: elapsedH, m: elapsedM, s: elapsedS });
+
+    return { h: elapsedH, m: elapsedM, s: elapsedS };
+  }
+
+  function getElapsedTime() {
+    if (!workStartTime) {
+      setElapsedTime(undefined);
+      return;
+    }
+
+    if (!workEndTime) {
+      let time = calcTimeDifference(
+        { h: workStartTime.h, m: workStartTime.m, s: workStartTime.s },
+        { h: date.getHours(), m: date.getMinutes(), s: date.getSeconds() }
+      );
+      if (breakTimeSum) {
+        time = calcTimeDifference(
+          { h: breakTimeSum.h, m: breakTimeSum.m, s: breakTimeSum.s },
+          { h: time.h, m: time.m, s: time.s }
+        );
+      }
+      setElapsedTime({ h: time.h, m: time.m, s: time.s });
+      console.log('経過時間　h:' + time.h + 'm:' + time.m + 's:' + time.s);
+    } else {
+      let time = calcTimeDifference(
+        { h: workStartTime.h, m: workStartTime.m, s: workStartTime.s },
+        { h: workEndTime.h, m: workEndTime.m, s: workEndTime.s }
+      );
+      if (breakTimeSum) {
+        time = calcTimeDifference(
+          { h: breakTimeSum.h, m: breakTimeSum.m, s: breakTimeSum.s },
+          { h: time.h, m: time.m, s: time.s }
+        );
+      }
+      setElapsedTime({ h: time.h, m: time.m, s: time.s });
+      console.log('経過時間　h:' + time.h + 'm:' + time.m + 's:' + time.s);
+    }
   }
 
   const formatTime = (time: Time | undefined) => {
@@ -235,6 +255,7 @@ export const App = () => {
     } else {
       setIsActiveBreaking4(false);
     }
+    calcBreakTime();
   }, [
     breakTime1,
     breakTime2,
@@ -246,8 +267,49 @@ export const App = () => {
     breakTime8,
   ]);
 
-  const calBreakTime = () => {
-    setBreakTimeSum();
+  const calcBreakTime = () => {
+    let timeSec = 0;
+
+    if (breakTime1 && breakTime2) {
+      let time = calcTimeDifference(breakTime1, breakTime2);
+      timeSec += time.h * 3600 + time.m * 60 + time.s;
+    } else if (breakTime1 && isBreaking) {
+      let time = calcTimeDifference(breakTime1, { h: h, m: m, s: s });
+      timeSec += time.h * 3600 + time.m * 60 + time.s;
+    }
+    if (breakTime3 && breakTime4) {
+      let time = calcTimeDifference(breakTime3, breakTime4);
+      timeSec += time.h * 3600 + time.m * 60 + time.s;
+    } else if (breakTime3 && isBreaking) {
+      let time = calcTimeDifference(breakTime3, { h: h, m: m, s: s });
+      timeSec += time.h * 3600 + time.m * 60 + time.s;
+    }
+    if (breakTime5 && breakTime6) {
+      let time = calcTimeDifference(breakTime5, breakTime6);
+      timeSec += time.h * 3600 + time.m * 60 + time.s;
+    } else if (breakTime5 && isBreaking) {
+      let time = calcTimeDifference(breakTime5, { h: h, m: m, s: s });
+      timeSec += time.h * 3600 + time.m * 60 + time.s;
+    }
+    if (breakTime7 && breakTime8) {
+      let time = calcTimeDifference(breakTime7, breakTime8);
+      timeSec += time.h * 3600 + time.m * 60 + time.s;
+    } else if (breakTime7 && isBreaking) {
+      let time = calcTimeDifference(breakTime7, { h: h, m: m, s: s });
+      timeSec += time.h * 3600 + time.m * 60 + time.s;
+    }
+
+    const hours = Math.floor(timeSec / 3600);
+    const minutes = Math.floor((timeSec % 3600) / 60);
+    const secondsLeft = timeSec % 60;
+
+    console.log('休憩時間　h:' + hours + 'm:' + minutes + 's:' + secondsLeft);
+
+    if (timeSec === 0) {
+      setBreakTimeSum(undefined);
+    } else {
+      setBreakTimeSum({ h: hours, m: minutes, s: secondsLeft });
+    }
   };
 
   const sortBreakTime = (): number => {
@@ -366,14 +428,20 @@ export const App = () => {
   };
 
   function addTime() {
-    if (!workStartTime) return `--:--`;
+    if (!workStartTime) return `--:--:--`;
     let hour: number = workStartTime.h;
     let minute: number = workStartTime.m;
     let second: number = workStartTime.s;
     let addHour: number = Number(targetH);
     let addMinute: number = Number(targetM);
+    let addSecond: number = 0;
+    if (breakTimeSum) {
+      addHour += breakTimeSum.h;
+      addMinute += breakTimeSum.m;
+      addSecond += breakTimeSum.s;
+    }
     // 1時間 = 60分、1分 = 60秒として、分と秒について計算
-    var totalSecond = (hour + addHour) * 3600 + (minute + addMinute) * 60 + second;
+    var totalSecond = (hour + addHour) * 3600 + (minute + addMinute) * 60 + second + addSecond;
     var newHour = Math.floor(totalSecond / 3600);
     var newMinute = Math.floor((totalSecond % 3600) / 60);
     var newSecond = totalSecond % 60;
@@ -384,8 +452,9 @@ export const App = () => {
     // 時、分、秒の桁数が1桁の場合、先頭に0をつける
     var newHour2 = ('00' + newHour).slice(-2);
     var newMinute2 = ('00' + newMinute).slice(-2);
+    var newSecond2 = ('00' + newSecond).slice(-2);
 
-    return `${newHour2}:${newMinute2}`;
+    return `${newHour2}:${newMinute2}:${newSecond2}`;
   }
 
   return (
@@ -398,6 +467,9 @@ export const App = () => {
       </p>
       <div>
         <p>{elapsedTime ? `経過時間：${formatTime(elapsedTime)}` : '経過時間：--:--'}</p>
+      </div>
+      <div>
+        <p>{breakTimeSum ? `休憩時間：${formatTime(breakTimeSum)}` : '休憩時間：--:--'}</p>
       </div>
       <div>
         <Button id="toggleButton1" toggle active={isWorking} onClick={handleClick1}>
