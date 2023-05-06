@@ -56,21 +56,16 @@ export const App = () => {
       });
     }, 1000);
 
-    // Get time
-    setDate(date);
-
     getElapsedTime();
     calcBreakTime();
   }, [date]);
 
   const workStartClear = () => {
     setWorkStartTime(undefined);
-    getElapsedTime();
   };
   const workEndClear = () => {
     console.log('test');
     setWorkEndTime(undefined);
-    getElapsedTime();
   };
   const break1Clear = () => {
     setBreakTime1(undefined);
