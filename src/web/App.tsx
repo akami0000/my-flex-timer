@@ -37,9 +37,6 @@ export const App = () => {
   const [isActiveBreaking3, setIsActiveBreaking3] = useState(false);
   const [isActiveBreaking4, setIsActiveBreaking4] = useState(false);
 
-  const [buttonText, setButtonText] = useState('not working.');
-  const [breakButtonText, setBreakButtonText] = useState('Off break');
-
   const [breakTimeSum, setBreakTimeSum] = useState<Time | undefined>();
 
   useEffect(() => {
@@ -244,10 +241,8 @@ export const App = () => {
 
   const handleClick1 = () => {
     if (isWorking) {
-      setButtonText('not working.');
       setWorkEndTime(date);
     } else {
-      setButtonText('working!');
       setWorkStartTime(date);
     }
     setIsWorking(!isWorking);
@@ -428,11 +423,6 @@ export const App = () => {
   };
 
   const handleClick2 = () => {
-    if (isBreaking) {
-      setBreakButtonText('Off break');
-    } else {
-      setBreakButtonText('On break');
-    }
     setBreakTime();
     setIsBreaking(!isBreaking);
   };
@@ -513,7 +503,7 @@ export const App = () => {
         </div>
         <div>
           <Button id="toggleButton1" toggle active={isWorking} onClick={handleClick1}>
-            {buttonText}
+            {isWorking ? 'working!' : 'not working.'}
           </Button>
           <Button
             id="toggleButton2"
@@ -522,7 +512,7 @@ export const App = () => {
             disabled={!isWorking}
             onClick={handleClick2}
           >
-            {breakButtonText}
+            {isBreaking ? 'On break' : 'Off break'}
           </Button>
         </div>
         <div className="top">

@@ -8,7 +8,7 @@ body{
   }
   .content {
     /* 上マージン 右マージン 下マージン 左マージン */
-    margin: 0px 50px 00px 50px;
+    margin: 0px 50px 0px 50px;
   }
 
   .box {
