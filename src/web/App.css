@@ -1,0 +1,27 @@
+body{
+  overflow: hidden;
+}
+  .container {
+    font-family: sans-serif;
+    text-align: center;
+
+  }
+  .content {
+    /* 上マージン 右マージン 下マージン 左マージン */
+    margin: 0px 50px 0px 50px;
+  }
+
+  .box {
+    padding: 10px;
+  }
+  .top {
+    padding-top: 10px;
+    /* display: flex; */
+    justify-content: flex-start;
+  }
+  .bottom {
+    padding-bottom: 10px;
+  }
+  .right{
+    margin-right: 10px;
+  }

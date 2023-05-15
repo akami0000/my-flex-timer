@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- CSP の設定 https://developer.mozilla.org/ja/docs/Web/HTTP/CSP -->
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com; " />
+
+    <link
+    async
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui-react/dist/umd/semantic-ui-react.min.js"></script>
+
+    <title>My Flex Timer</title>
+  </head>
+  <body>
+    <!-- React アプリのマウントポイント -->
+    <div id="root"></div>
+  </body>
+</html>
