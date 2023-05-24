@@ -443,10 +443,10 @@ export const App = () => {
   };
 
   function addTime() {
-    if (!workStartTime) return `--:--:--`;
-    let hour: number = workStartTime.h;
-    let minute: number = workStartTime.m;
-    let second: number = workStartTime.s;
+    let hour: number = workStartTime ? workStartTime.h : date.h;
+    let minute: number = workStartTime ? workStartTime.m : date.m;
+    let second: number = workStartTime ? workStartTime.s : date.s;
+
     let addHour: number = Number(targetH);
     let addMinute: number = Number(targetM);
     let addSecond: number = 0;
