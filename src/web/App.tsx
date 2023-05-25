@@ -2,7 +2,6 @@ import './App.css';
 import React from 'react';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import { Button, Label, Icon, Tab } from 'semantic-ui-react';
 
 interface Time {
   h: number;
@@ -162,7 +161,8 @@ export const App = () => {
     }
     const formattedHour = String(time.h).padStart(2, '0');
     const formattedMinutes = String(time.m).padStart(2, '0');
-    return `${formattedHour}:${formattedMinutes}`;
+    const formattedSeconds = String(time.s).padStart(2, '0');
+    return `${formattedHour}:${formattedMinutes}:${formattedSeconds}`;
   };
 
   const setTime = (index: number, time: Time) => {
@@ -491,7 +491,7 @@ export const App = () => {
         <div className="tabBotton">
           {isTargetOn && (
             <div>
-              <Button
+              <button
                 className={isTimer ? 'ui circular red button' : 'ui circular basic button'}
                 style={{
                   marginRight: '10px',
@@ -500,8 +500,8 @@ export const App = () => {
                 onClick={() => tabButtonClicked(true)}
               >
                 TIMER
-              </Button>
-              <Button
+              </button>
+              <button
                 className={isTimer ? 'ui circular basic button' : 'ui circular red button'}
                 style={{
                   marginRight: '10px',
@@ -510,7 +510,7 @@ export const App = () => {
                 onClick={() => tabButtonClicked(false)}
               >
                 TARGET
-              </Button>
+              </button>
             </div>
           )}
         </div>
@@ -520,34 +520,46 @@ export const App = () => {
       </div>
       <div className="content">
         <div
-          className="box"
           style={
             {
               // marginTop: '50px',
             }
           }
         >
-          <h1>
-            {date.h.toString().padStart(2, '0')}:{date.m.toString().padStart(2, '0')}:
-            {date.s.toString().padStart(2, '0')}
-          </h1>
+          <p
+            style={{
+              fontSize: isWorking ? '14px' : '54px',
+            }}
+          >
+            {date.h.toString().padStart(2, '0')}:{date.m.toString().padStart(2, '0')}
+            {isWorking ? '' : ':' + date.s.toString().padStart(2, '0')}
+          </p>
         </div>
         <div>
-          <p>{elapsedTime ? `経過時間：${formatTime(elapsedTime)}` : '経過時間：--:--'}</p>
+          <p
+            style={{
+              fontSize: isWorking ? '54px' : '14px',
+            }}
+          >
+            {elapsedTime ? `${formatTime(elapsedTime)}` : '--:--'}
+          </p>
         </div>
         <div>
-          <Button id="toggleButton1" toggle active={isWorking} onClick={handleClick1}>
+          <button
+            id="toggleButton1"
+            className={isWorking ? 'ui green button' : 'ui  gray button'}
+            onClick={handleClick1}
+          >
             {isWorking ? 'working!' : 'not working.'}
-          </Button>
-          <Button
+          </button>
+          <button
             id="toggleButton2"
-            toggle
-            active={isBreaking}
+            className={isBreaking ? 'ui green button' : 'ui  gray button'}
             disabled={!isWorking}
             onClick={handleClick2}
           >
             {isBreaking ? 'On break' : 'Off break'}
-          </Button>
+          </button>
         </div>
         <div className="top">
           <label htmlFor="name" className="right">

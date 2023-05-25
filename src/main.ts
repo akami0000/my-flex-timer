@@ -11,6 +11,9 @@ app.whenReady().then(() => {
     // ウィンドウサイズの最小
     minWidth: 400,
     minHeight: 550,
+    // // ウィンドウサイズの最大
+    // maxWidth: 400,
+    // maxHeight: 550,
     webPreferences: {
       // webpack が出力したプリロードスクリプトを読み込み
       preload: path.join(__dirname, 'preload.js'),
