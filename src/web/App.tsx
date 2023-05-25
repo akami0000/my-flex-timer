@@ -2,7 +2,7 @@ import './App.css';
 import React from 'react';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import { Button, Label, Icon } from 'semantic-ui-react';
+import { Button, Label, Icon, Tab } from 'semantic-ui-react';
 
 interface Time {
   h: number;
@@ -15,6 +15,7 @@ export const App = () => {
   const [date, setDate] = useState<Time>({ h: 0, m: 0, s: 0 });
   const [isWorking, setIsWorking] = useState(false);
   const [isBreaking, setIsBreaking] = useState(false);
+  const [isTimer, setIsTimer] = useState(true);
 
   const [targetH, setTargetH] = useState<number | undefined>(8);
   const [targetM, setTargetM] = useState<number | undefined>(0);
@@ -472,6 +473,13 @@ export const App = () => {
     return `${newHour2}:${newMinute2}:${newSecond2}`;
   }
 
+  const tabButtonClicked = (target: boolean) => {
+    if (target) setIsTimer(true);
+    else setIsTimer(false);
+  };
+
+  const isTargetOn = false;
+
   return (
     <div className="container">
       <div
@@ -480,9 +488,35 @@ export const App = () => {
           textAlign: 'right',
         }}
       >
-        <Button className="ui button" onClick={allClear}>
+        <div className="tabBotton">
+          {isTargetOn && (
+            <div>
+              <Button
+                className={isTimer ? 'ui circular red button' : 'ui circular basic button'}
+                style={{
+                  marginRight: '10px',
+                  marginLeft: '10px',
+                }}
+                onClick={() => tabButtonClicked(true)}
+              >
+                TIMER
+              </Button>
+              <Button
+                className={isTimer ? 'ui circular basic button' : 'ui circular red button'}
+                style={{
+                  marginRight: '10px',
+                  marginLeft: '10px',
+                }}
+                onClick={() => tabButtonClicked(false)}
+              >
+                TARGET
+              </Button>
+            </div>
+          )}
+        </div>
+        <button className="ui button" onClick={allClear}>
           Reset
-        </Button>
+        </button>
       </div>
       <div className="content">
         <div
@@ -703,45 +737,49 @@ export const App = () => {
             <i aria-hidden="true" className="undo icon"></i>
           </button>
         </div>
-        <div
-          className="box"
-          style={{
-            borderTop: '1px solid gray',
-          }}
-        >
-          <label htmlFor="name" className="right">
-            目標時間:
-          </label>
-          <div className="ui mini input">
-            <input
-              type="text"
-              name="name"
-              value={targetH}
-              required
-              minLength={parseInt('1')}
-              maxLength={parseInt('2')}
-              style={{ width: '50px', textAlign: 'center' }}
-              onChange={handleChangeTargetH}
-            />
+        {isTargetOn && (
+          <div>
+            <div
+              className="box"
+              style={{
+                borderTop: '1px solid gray',
+              }}
+            >
+              <label htmlFor="name" className="right">
+                目標時間:
+              </label>
+              <div className="ui mini input">
+                <input
+                  type="text"
+                  name="name"
+                  value={targetH}
+                  required
+                  minLength={parseInt('1')}
+                  maxLength={parseInt('2')}
+                  style={{ width: '50px', textAlign: 'center' }}
+                  onChange={handleChangeTargetH}
+                />
+              </div>
+              <label htmlFor="name">h</label>
+              <div className="ui mini input">
+                <input
+                  type="text"
+                  name="name"
+                  value={targetM}
+                  required
+                  minLength={parseInt('1')}
+                  maxLength={parseInt('2')}
+                  style={{ width: '50px', textAlign: 'center' }}
+                  onChange={handleChangeTargetM}
+                />
+              </div>
+              <label htmlFor="name">m</label>
+            </div>
+            <div>
+              <label htmlFor="name">{addTime()}</label>
+            </div>
           </div>
-          <label htmlFor="name">h</label>
-          <div className="ui mini input">
-            <input
-              type="text"
-              name="name"
-              value={targetM}
-              required
-              minLength={parseInt('1')}
-              maxLength={parseInt('2')}
-              style={{ width: '50px', textAlign: 'center' }}
-              onChange={handleChangeTargetM}
-            />
-          </div>
-          <label htmlFor="name">m</label>
-        </div>
-        <div>
-          <label htmlFor="name">{addTime()}</label>
-        </div>
+        )}
       </div>
     </div>
   );

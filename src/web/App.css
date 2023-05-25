@@ -25,3 +25,8 @@ body{
   .right{
     margin-right: 10px;
   }
+
+  .tabBotton {
+    font-family: sans-serif;
+    text-align: center;
+  }
