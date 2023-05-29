@@ -66,6 +66,46 @@ export const App = () => {
     calcBreakTime();
   }, [date]);
 
+  useEffect(() => {
+    setS_startTime(formatTime(workStartTime));
+  }, [workStartTime]);
+
+  useEffect(() => {
+    setS_endTime(formatTime(workEndTime));
+  }, [workEndTime]);
+
+  useEffect(() => {
+    setS_BreakTime1(formatTime(breakTime1));
+  }, [breakTime1]);
+
+  useEffect(() => {
+    setS_BreakTime2(formatTime(breakTime2));
+  }, [breakTime2]);
+
+  useEffect(() => {
+    setS_BreakTime3(formatTime(breakTime3));
+  }, [breakTime3]);
+
+  useEffect(() => {
+    setS_BreakTime4(formatTime(breakTime4));
+  }, [breakTime4]);
+
+  useEffect(() => {
+    setS_BreakTime5(formatTime(breakTime5));
+  }, [breakTime5]);
+
+  useEffect(() => {
+    setS_BreakTime6(formatTime(breakTime6));
+  }, [breakTime6]);
+
+  useEffect(() => {
+    setS_BreakTime7(formatTime(breakTime7));
+  }, [breakTime7]);
+
+  useEffect(() => {
+    setS_BreakTime8(formatTime(breakTime8));
+  }, [breakTime8]);
+
   const allClear = () => {
     if (isWorking) {
       handleClick1();
@@ -167,6 +207,15 @@ export const App = () => {
   }
 
   const formatTime = (time: Time | undefined) => {
+    if (!time) {
+      return '--:--';
+    }
+    const formattedHour = String(time.h).padStart(2, '0');
+    const formattedMinutes = String(time.m).padStart(2, '0');
+    return `${formattedHour}:${formattedMinutes}`;
+  };
+
+  const formatTimeSec = (time: Time | undefined) => {
     if (!time) {
       return '--:--';
     }
@@ -588,7 +637,7 @@ export const App = () => {
               fontSize: isWorking ? '54px' : '14px',
             }}
           >
-            {elapsedTime ? `${formatTime(elapsedTime)}` : '--:--'}
+            {elapsedTime ? `${formatTimeSec(elapsedTime)}` : '--:--:--'}
           </p>
         </div>
         <div>
@@ -641,7 +690,7 @@ export const App = () => {
               <input
                 type="text"
                 name="name"
-                value={formatTime(breakTime1)}
+                value={s_breakTime1}
                 required
                 minLength={parseInt('4')}
                 maxLength={parseInt('5')}
@@ -654,7 +703,7 @@ export const App = () => {
               <input
                 type="text"
                 name="name"
-                value={formatTime(breakTime2)}
+                value={s_breakTime2}
                 required
                 minLength={parseInt('4')}
                 maxLength={parseInt('5')}
@@ -676,7 +725,7 @@ export const App = () => {
               <input
                 type="text"
                 name="name"
-                value={formatTime(breakTime3)}
+                value={s_breakTime3}
                 required
                 minLength={parseInt('4')}
                 maxLength={parseInt('5')}
@@ -689,7 +738,7 @@ export const App = () => {
               <input
                 type="text"
                 name="name"
-                value={formatTime(breakTime4)}
+                value={s_breakTime4}
                 required
                 minLength={parseInt('4')}
                 maxLength={parseInt('5')}
@@ -711,7 +760,7 @@ export const App = () => {
               <input
                 type="text"
                 name="name"
-                value={formatTime(breakTime5)}
+                value={s_breakTime5}
                 required
                 minLength={parseInt('4')}
                 maxLength={parseInt('5')}
@@ -724,7 +773,7 @@ export const App = () => {
               <input
                 type="text"
                 name="name"
-                value={formatTime(breakTime6)}
+                value={s_breakTime6}
                 required
                 minLength={parseInt('4')}
                 maxLength={parseInt('5')}
@@ -746,7 +795,7 @@ export const App = () => {
               <input
                 type="text"
                 name="name"
-                value={formatTime(breakTime7)}
+                value={s_breakTime7}
                 required
                 minLength={parseInt('4')}
                 maxLength={parseInt('5')}
@@ -759,7 +808,7 @@ export const App = () => {
               <input
                 type="text"
                 name="name"
-                value={formatTime(breakTime8)}
+                value={s_breakTime8}
                 required
                 minLength={parseInt('4')}
                 maxLength={parseInt('5')}
@@ -781,7 +830,7 @@ export const App = () => {
               type="text"
               id="endTime"
               name="name"
-              value={formatTime(workEndTime)}
+              value={s_endTime}
               required
               minLength={parseInt('4')}
               maxLength={parseInt('5')}
