@@ -32,6 +32,17 @@ export const App = () => {
   const [breakTime7, setBreakTime7] = useState<Time | undefined>();
   const [breakTime8, setBreakTime8] = useState<Time | undefined>();
 
+  const [s_startTime, setS_startTime] = useState<string>();
+  const [s_endTime, setS_endTime] = useState<string>();
+  const [s_breakTime1, setS_BreakTime1] = useState<string>();
+  const [s_breakTime2, setS_BreakTime2] = useState<string>();
+  const [s_breakTime3, setS_BreakTime3] = useState<string>();
+  const [s_breakTime4, setS_BreakTime4] = useState<string>();
+  const [s_breakTime5, setS_BreakTime5] = useState<string>();
+  const [s_breakTime6, setS_BreakTime6] = useState<string>();
+  const [s_breakTime7, setS_BreakTime7] = useState<string>();
+  const [s_breakTime8, setS_BreakTime8] = useState<string>();
+
   const [isActiveBreaking1, setIsActiveBreaking1] = useState(false);
   const [isActiveBreaking2, setIsActiveBreaking2] = useState(false);
   const [isActiveBreaking3, setIsActiveBreaking3] = useState(false);
@@ -200,6 +211,41 @@ export const App = () => {
     }
   };
 
+  const setText = (index: number, val: string) => {
+    switch (index) {
+      case 0:
+        setS_startTime(val);
+        break;
+      case 1:
+        setS_endTime(val);
+        break;
+      case 2:
+        setS_BreakTime1(val);
+        break;
+      case 3:
+        setS_BreakTime2(val);
+        break;
+      case 4:
+        setS_BreakTime3(val);
+        break;
+      case 5:
+        setS_BreakTime4(val);
+        break;
+      case 6:
+        setS_BreakTime5(val);
+        break;
+      case 7:
+        setS_BreakTime6(val);
+        break;
+      case 8:
+        setS_BreakTime7(val);
+        break;
+      case 9:
+        setS_BreakTime8(val);
+        break;
+    }
+  };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
     // arg1
     // 0 = 開始時間、setWorkStartTime
@@ -230,6 +276,7 @@ export const App = () => {
     }
 
     formattedVal = formattedVal.replace(/:+/g, ':'); // 2つ以上連続したコロンを1つに置換する
+    setText(index, formattedVal);
 
     if (formattedVal.length === 5 && formattedVal.includes(':')) {
       const newStr = formattedVal.replace(/:/g, '');
@@ -570,7 +617,7 @@ export const App = () => {
               type="text"
               id="startTime"
               name="name"
-              value={formatTime(workStartTime)}
+              value={s_startTime}
               required
               minLength={parseInt('4')}
               maxLength={parseInt('5')}
