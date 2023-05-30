@@ -574,7 +574,7 @@ export const App = () => {
     else setIsTimer(false);
   };
 
-  const isTargetOn = false;
+  const isTargetOn = true;
 
   return (
     <div className="container">
