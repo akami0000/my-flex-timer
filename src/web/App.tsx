@@ -9,6 +9,12 @@ interface Time {
   s: number;
 }
 
+interface s_Time {
+  h: string;
+  m: string;
+  s: string;
+}
+
 export const App = () => {
   let newDate = new Date();
   const [date, setDate] = useState<Time>({ h: 0, m: 0, s: 0 });
@@ -19,7 +25,7 @@ export const App = () => {
   const [targetH, setTargetH] = useState<number | undefined>(8);
   const [targetM, setTargetM] = useState<number | undefined>(0);
 
-  const [elapsedTime, setElapsedTime] = useState<Time | undefined>();
+  const [elapsedTime, setElapsedTime] = useState<s_Time | undefined>();
 
   const [workStartTime, setWorkStartTime] = useState<Time | undefined>();
   const [workEndTime, setWorkEndTime] = useState<Time | undefined>();
@@ -171,6 +177,65 @@ export const App = () => {
     return { h: elapsedH, m: elapsedM, s: elapsedS };
   }
 
+  function calcTimeDifferenceSubtractBreakTime(start: Time, end: Time): s_Time {
+    let elapsedH = end.h - start.h;
+    let elapsedM = end.m - start.m;
+    let elapsedS = end.s - start.s;
+
+    if (breakTimeSum) {
+      elapsedH -= breakTimeSum.h;
+      elapsedM -= breakTimeSum.m;
+      elapsedS -= breakTimeSum.s;
+    }
+    let sec = elapsedH * 3600 + elapsedM * 60 + elapsedS;
+    if (sec < 0) {
+      // let sec = elapsedH * 3600 + elapsedM * 60 + elapsedS;
+      // console.log(sec);
+      // elapsedH = Math.floor(sec / 3600);
+      // elapsedM = Math.abs(Math.floor((sec % 3600) / 60));
+      // elapsedS = Math.abs(sec % 60);
+
+      const absTotalSeconds: number = Math.abs(sec);
+      elapsedM = Math.floor(absTotalSeconds / 60);
+      elapsedS = absTotalSeconds % 60;
+      elapsedH = Math.floor(elapsedM / 60);
+
+      // if (elapsedS < 0) {
+      //   elapsedS += 60;
+      //   elapsedM--;
+      // }
+      // if (elapsedM < 0) {
+      //   elapsedM += 60;
+      //   elapsedH--;
+      // }
+      // if (elapsedH < 0) {
+      //   elapsedH += 24;
+      // }
+      return {
+        h: '-' + elapsedH.toString().padStart(2, '0'),
+        m: elapsedM.toString().padStart(2, '0'),
+        s: elapsedS.toString().padStart(2, '0'),
+      };
+    } else {
+      if (elapsedS < 0) {
+        elapsedS += 60;
+        elapsedM--;
+      }
+      if (elapsedM < 0) {
+        elapsedM += 60;
+        elapsedH--;
+      }
+      if (elapsedH < 0) {
+        elapsedH += 24;
+      }
+      return {
+        h: elapsedH.toString().padStart(2, '0'),
+        m: elapsedM.toString().padStart(2, '0'),
+        s: elapsedS.toString().padStart(2, '0'),
+      };
+    }
+  }
+
   function getElapsedTime() {
     if (!workStartTime) {
       setElapsedTime(undefined);
@@ -178,29 +243,17 @@ export const App = () => {
     }
 
     if (!workEndTime) {
-      let time = calcTimeDifference(
+      let time = calcTimeDifferenceSubtractBreakTime(
         { h: workStartTime.h, m: workStartTime.m, s: workStartTime.s },
         date
       );
-      if (breakTimeSum) {
-        time = calcTimeDifference(
-          { h: breakTimeSum.h, m: breakTimeSum.m, s: breakTimeSum.s },
-          { h: time.h, m: time.m, s: time.s }
-        );
-      }
       setElapsedTime({ h: time.h, m: time.m, s: time.s });
       console.log('経過時間　h:' + time.h + 'm:' + time.m + 's:' + time.s);
     } else {
-      let time = calcTimeDifference(
+      let time = calcTimeDifferenceSubtractBreakTime(
         { h: workStartTime.h, m: workStartTime.m, s: workStartTime.s },
         { h: workEndTime.h, m: workEndTime.m, s: workEndTime.s }
       );
-      if (breakTimeSum) {
-        time = calcTimeDifference(
-          { h: breakTimeSum.h, m: breakTimeSum.m, s: breakTimeSum.s },
-          { h: time.h, m: time.m, s: time.s }
-        );
-      }
       setElapsedTime({ h: time.h, m: time.m, s: time.s });
       console.log('経過時間　h:' + time.h + 'm:' + time.m + 's:' + time.s);
     }
@@ -341,6 +394,8 @@ export const App = () => {
       setWorkEndTime(date);
     } else {
       setWorkStartTime(date);
+      setBreakTime1({ h: 12, m: 0, s: 0 });
+      setBreakTime2({ h: 13, m: 0, s: 0 });
     }
     setIsWorking(!isWorking);
   };
@@ -637,7 +692,7 @@ export const App = () => {
               fontSize: isWorking ? '54px' : '14px',
             }}
           >
-            {elapsedTime ? `${formatTimeSec(elapsedTime)}` : '--:--:--'}
+            {elapsedTime ? `${elapsedTime.h}:${elapsedTime.m}:${elapsedTime.s}` : '--:--:--'}
           </p>
         </div>
         <div>
